@@ -76,21 +76,23 @@ jobs:
           version="${TAG_NAME#v}"
           mkdir -p release-upload
 
-          windows_setup="$(find release-artifacts -type f -name '*.Setup.exe' -print -quit)"
+          windows_setup="$(find release-artifacts -type f -iname '*.exe' -print -quit)"
           macos_zip="$(find release-artifacts -type f -path '*darwin*' -name '*.zip' -print -quit)"
 
           if [[ -z "$windows_setup" ]]; then
             echo "Windows setup file was not found."
+            find release-artifacts -type f -print
             exit 1
           fi
 
           if [[ -z "$macos_zip" ]]; then
             echo "macOS zip file was not found."
+            find release-artifacts -type f -print
             exit 1
           fi
 
-          cp "$windows_setup" "release-upload/桌面记帐-${version}-Windows-Setup.exe"
-          cp "$macos_zip" "release-upload/桌面记帐-${version}-macOS-arm64.zip"
+          cp "$windows_setup" "release-upload/Desktop-Accounting-${version}-Windows-Setup.exe"
+          cp "$macos_zip" "release-upload/Desktop-Accounting-${version}-macOS-arm64.zip"
 
       - name: Create release and upload files
         env:
