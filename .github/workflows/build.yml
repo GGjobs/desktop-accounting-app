@@ -67,6 +67,31 @@ jobs:
         with:
           path: release-artifacts
 
+      - name: Prepare release files
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          version="${TAG_NAME#v}"
+          mkdir -p release-upload
+
+          windows_setup="$(find release-artifacts -type f -name '*.Setup.exe' -print -quit)"
+          macos_zip="$(find release-artifacts -type f -path '*darwin*' -name '*.zip' -print -quit)"
+
+          if [[ -z "$windows_setup" ]]; then
+            echo "Windows setup file was not found."
+            exit 1
+          fi
+
+          if [[ -z "$macos_zip" ]]; then
+            echo "macOS zip file was not found."
+            exit 1
+          fi
+
+          cp "$windows_setup" "release-upload/桌面记帐-${version}-Windows-Setup.exe"
+          cp "$macos_zip" "release-upload/桌面记帐-${version}-macOS-arm64.zip"
+
       - name: Create release and upload files
         env:
           GH_TOKEN: ${{ github.token }}
@@ -79,6 +104,11 @@ jobs:
             gh release create "$TAG_NAME" --title "$TAG_NAME" --notes "桌面记帐 $TAG_NAME"
           fi
 
+          while IFS= read -r asset; do
+            [[ -z "$asset" ]] && continue
+            gh release delete-asset "$TAG_NAME" "$asset" --yes
+          done < <(gh release view "$TAG_NAME" --json assets --jq '.assets[].name')
+
           while IFS= read -r -d '' file; do
             gh release upload "$TAG_NAME" "$file" --clobber
-          done < <(find release-artifacts -type f -print0)
+          done < <(find release-upload -type f -print0)
