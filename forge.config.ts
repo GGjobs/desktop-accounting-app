@@ -17,6 +17,12 @@ const config: ForgeConfig = {
     appBundleId: 'com.hhl.desktop-accounting',
     appCategoryType: 'public.app-category.finance',
     icon: './assets/icon',
+    osxSign: {
+      identity: '-',
+      identityValidation: false,
+      optionsForFile: () => ({ hardenedRuntime: false }),
+      preAutoEntitlements: false,
+    },
   },
   rebuildConfig: {},
   makers: [

@@ -180,10 +180,11 @@
 - 已实现设置页增强：设置月预算、查看本地数据库保存位置、查看应用版本和平台、导出 CSV。
 - 已实现自定义应用图标：图标生成脚本为 `scripts/generate-icons.mjs`，输出 `assets/icon.png`、`assets/icon.icns`、`assets/icon.ico`，`npm run package` 会自动先执行 `npm run generate:icons`。
 - 已优化 macOS 打包元数据：Bundle ID 为 `com.hhl.desktop-accounting`，应用分类为 `public.app-category.finance`。
+- `v1.0.1` 已增加 macOS 免费临时代码签名；应用和 Electron 框架使用一致的 ad-hoc 签名，并关闭不适用于临时签名的 Hardened Runtime。该方案能保证文件签名完整性，但不能替代苹果 Developer ID 签名与公证。
 - 已配置 GitHub Actions 云端打包：`.github/workflows/build.yml` 会在 `main` 分支推送时构建 Windows/macOS 产物，在 `v*` 标签推送时创建 GitHub Release 并上传产物。
 - 已添加 GitHub 发布说明：`docs/github-release.md`。
 - 已生成 macOS arm64 打包产物：`out/桌面记帐-darwin-arm64/桌面记帐.app`。
-- 已生成本机 macOS zip 产物：`out/make/zip/darwin/arm64/桌面记帐-darwin-arm64-1.0.0.zip`。
+- 已生成本机 macOS zip 产物：`out/make/zip/darwin/arm64/桌面记帐-darwin-arm64-1.0.1.zip`；压缩完整性和 `codesign --verify --deep --strict` 校验已通过。
 - `npm run lint` 已通过。
 - `npm run package` 已通过；国内网络下如 Electron 下载超时，可使用 `ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ npm run package`。
 - `npm run make` 已通过；当前 Mac 本机只能验证 macOS zip，Windows 安装包将由 GitHub Actions 的 Windows runner 生成。

@@ -1,7 +1,7 @@
 {
   "name": "desktop-accounting",
   "productName": "桌面记帐",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A local desktop expense tracker for RMB spending.",
   "main": ".webpack/main",
   "private": true,
